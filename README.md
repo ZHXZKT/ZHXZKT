@@ -20,8 +20,7 @@
 
 	1. 框架：vue+uni-app
  	2. ui: uview-ui
-
-1. 包管理工具: npm
+ 	3. 包管理工具: npm
 
 #### web端
 
@@ -31,11 +30,11 @@
 
 #### 后端
 
-1. 框架：python + Django + Django REST Framework
+​	框架：python + Django + Django REST Framework
 
 #### 前后端链接
 
-1. axios
+​	axios
 
 
 
