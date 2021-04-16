@@ -1,0 +1,27 @@
+upstream django {
+        server django:${WEB_PORT};
+}
+
+server {
+        charset utf-8;
+        listen ${NGINX_PORT};
+        server_name ${NGINX_HOST};
+
+        location ${URL_PREFIX}/ {
+            proxy_pass http://django/;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+            proxy_redirect off;
+
+        }
+
+        location /static/ {
+            alias /data/apps/django/static/;
+        }
+
+        location / {
+            root  /dist;
+            index  index.html;
+            try_files $uri $uri/ /index.html;
+        }
+}

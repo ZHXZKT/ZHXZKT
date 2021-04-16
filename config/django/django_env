@@ -1,0 +1,6 @@
+DB_NAME=default
+DB_USER=default_user
+DB_PASS=default_user_password
+DB_PORT=3306
+DJANGO_SECRET_KEY=*k98-&w2-h$y2gk7r!s*9x%pq*3cea_dwf%zgb6=#h-t5z*(a$
+URL_PREFIX=/backend

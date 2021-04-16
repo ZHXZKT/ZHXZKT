@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+
+  database:
+    image: mariadb:10.5
+    # restart: always
+    env_file:
+      - config/db/db_env
+    networks:
+      - database_network
+    volumes:
+      - ./database/conf:/etc/mysql/conf.d   # 挂载配置目录
+      - ./database/data:/var/lib/mysql      # 挂载数据目录
+      - ./database/log:/var/log             # 挂载日志目录
+
+  django:
+    build: django/
+    # restart: always
+    volumes:
+      - ./django:/code
+    networks:
+      - nginx_network
+      - database_network
+    depends_on:
+      - database
+    env_file:
+      - config/django/django_env
+    # command: /bin/bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn example.wsgi -w 3 -k gthread -b 0.0.0.0:8000"
+
+  nginx:
+    image: nginx:1.19
+    # restart: always
+    ports:
+      # - 8000:8000       # 开发环境使用
+      - 80:80           # 生产环境使用
+      - 443:443         # 生产环境使用
+
+    volumes:
+      # 用户配置目录
+      - ./nginx/conf/conf.d:/etc/nginx/conf.d
+      # SSL 证书目录
+      - ./nginx/ssl:/etc/nginx/ssl
+      
+      # 静态文件（python manage.py collectstatic 命令收集到的静态文件的目录）
+      - ./django/example/static:/data/apps/django/static
+      # 日志
+      - ./nginx/log/:/var/log/nginx/
+      # Vue前端build文件夹
+      - ./frontend/dist/:/dist/
+    env_file:
+      - config/nginx/nginx_env
+    depends_on:
+      - django
+    networks:
+      - nginx_network
+    command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT $$NGINX_SSL_PORT $$WEB_PORT $$URL_PREFIX' < /etc/nginx/conf.d/local.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+
+
+networks:
+  nginx_network:
+    driver: bridge
+  database_network:
+    driver: bridge

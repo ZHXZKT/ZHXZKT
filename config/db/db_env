@@ -1,0 +1,4 @@
+MYSQL_ROOT_PASSWORD=root_password
+MYSQL_DATABASE=default
+MYSQL_USER=default_user
+MYSQL_PASSWORD=default_user_password

@@ -1,0 +1,18 @@
+[[source]]
+name = "tuna-pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "*"
+mysqlclient = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+djangorestframework-jwt = "*"
+gunicorn = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.8"
